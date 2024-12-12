@@ -15,10 +15,16 @@ public class MainManager : MonoBehaviour
     private bool m_Started = false;
     private int m_Points;
     private bool m_GameOver = false;
+    private Text highScoreText;
+    public Text HighScoreText;
 
     // Start is called before the first frame update
+
     void Start()
     {
+         // Oyuncu adı ve en yüksek skoru göster
+        HighScoreText.text = $"High Score: {MenuManager.Instance.highScorePlayerName} - {MenuManager.Instance.highScore}";
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -62,14 +68,18 @@ public class MainManager : MonoBehaviour
     void AddPoint(int point)
     {
         m_Points += point;
-        ScoreText.text = $"Score : {m_Points}";
+        //ScoreText.text = $"Score : {m_Points}";
+        ScoreText.text = $"{MenuManager.Instance.playerName} - Score: {m_Points}";
     }
-
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+            // En yüksek skor kontrolü
+        if (m_Points > MenuManager.Instance.highScore)
+        {
+            MenuManager.Instance.UpdateHighScore(m_Points, MenuManager.Instance.playerName);
+        }
     }
-
     
 }
